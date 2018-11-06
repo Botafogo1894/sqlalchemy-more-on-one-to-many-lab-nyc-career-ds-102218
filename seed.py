@@ -25,12 +25,6 @@ la_lakers = pd.read_csv('la_lakers_basketball.csv').to_dict(orient='records')
 ny_yankees = pd.read_csv('ny_yankees_baseball.csv').to_dict(orient='records')
 ny_knicks = pd.read_csv('ny_knicks_basketball.csv').to_dict(orient='records')
 
-#teams
-dodgers = Team(name = "Dodgers")
-lakers = Team(name = "Lakers")
-yankees = Team(name = "Yankees")
-knicks = Team(name = "Knicks")
-teams = [dodgers, lakers, yankees, knicks]
 #cities
 nyc = City(name = "New York", state = "NY")
 la =  City(name = "Los Angeles", state = "CA")
@@ -39,28 +33,36 @@ cities = [nyc, la]
 basketball = Sport(name = "basketball")
 baseball = Sport(name = "baseball")
 sports = [basketball, baseball]
+#teams
+dodgers = Team(name = "Dodgers", city = la, sport = baseball)
+lakers = Team(name = "Lakers", city = la, sport = basketball)
+yankees = Team(name = "Yankees", city = nyc, sport = baseball)
+knicks = Team(name = "Knicks", city = nyc, sport = basketball)
+teams = [dodgers, lakers, yankees, knicks]
 #players
-
-team_list = [la_dodgers, la_lakers, ny_yankees, ny_knicks]
-
-def create_player(data):
+def create_player(data, team):
     empty = []
-    for team in data:
-        for player in team:
-            try:
-                players = Player(name = player['name'], number = player['number'], height = player['height'], weight = player['weight'])
-                empty.append(players)
-            except KeyError:
-                player = Player(name = player['name'], height = player['height'], weight = player['weight'])
-                empty.append(players)
+    for player in data:
+        try:
+            players = Player(name = player['name'], number = player['number'], height = player['height'], weight = player['weight'], team = team)
+            empty.append(players)
+        except KeyError:
+            players = Player(name = player['name'], height = player['height'], weight = player['weight'], team = team)
+            empty.append(players)
     return empty
 
-final_players = create_player(team_list)
+dodgers_players = create_player(la_dodgers, dodgers)
+lakers_players = create_player(la_lakers, lakers)
+yankees_players = create_player(ny_yankees, yankees)
+knicks_players = create_player(ny_knicks, knicks)
 
 session.add_all(teams)
 session.add_all(cities)
 session.add_all(sports)
-session.add_all(final_players)
+session.add_all(dodgers_players)
+session.add_all(lakers_players)
+session.add_all(yankees_players )
+session.add_all(knicks_players)
 
 session.commit()
 

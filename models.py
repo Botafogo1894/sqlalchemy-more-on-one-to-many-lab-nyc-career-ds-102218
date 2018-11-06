@@ -14,7 +14,7 @@ class Player(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String)
     number = Column(Integer)
-    height = Column(Integer)
+    height = Column(String)
     weight = Column(Integer)
     team_id = Column(Integer, ForeignKey('teams.id'))
     team = relationship('Team', back_populates = 'roster')

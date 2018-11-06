@@ -8,16 +8,18 @@ session = Session()
 
 def return_teams_for_new_york():
     # here we want to return all teams that are associated with New York City
-    pass
+    ny = session.query(City).filter(City.name == "New York").first()
+    return ny.teams
 
 def return_players_for_la_dodgers():
-    # here we want to return all players that are associated with the LA dodgers
-    pass
+    dodgers = session.query(Team).filter(Team.name == "Dodgers").first()
+    return dodgers.roster
 
 def return_sorted_new_york_knicks():
-    # here we want to return all the players on the New York Knicks
+    knicks = session.query(Team).filter(Team.name == "Knicks").first()
+    team = knicks.roster
+    return sorted(team, key = lambda item: item.number)
     # sorted in ascending (small -> big) order by their number
-    pass
 
 def return_youngest_basket_ball_player_in_new_york():
     # here we want to sort all the players on New York Knicks by age
@@ -25,16 +27,20 @@ def return_youngest_basket_ball_player_in_new_york():
     pass
 
 def return_all_players_in_los_angeles():
-    # here we want to return all players that are associated with
-    # a sports team in LA
-    pass
+    lateams = session.query(City).filter(City.name == "Los Angeles").first().teams
+    players = [item.roster for item in lateams]
+    return players
 
 def return_tallest_player_in_los_angeles():
-    # here we want to return the tallest player associted with
-    # a sports team in LA
-    pass
+    lateams = session.query(City).filter(City.name == "Los Angeles").first().teams
+    players = [item.roster for item in lateams]
+    empty = []
+    for item in players:
+        for player in item:
+            empty.append(player)
+    return max(empty, key = lambda item: item.height)
+    # return max(players, key = lambda item: item.height)
 
 def return_team_with_heaviest_players():
-    # here we want to return the city with the players that
-    # have the heaviest average weight (total weight / total players)
+
     pass
